@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Prompt the user for each part of the subject line
-read -p "Enter country code 'US' (C): " country
-read -p "Enter state or province name 'California' (ST): " state
-read -p "Enter locality 'Los Angeles' (L): " locality
-read -p "Enter organization name 'crDroid' (O): " organization
-read -p "Enter organizational unit 'crDroid' (OU): " organizational_unit
-read -p "Enter common name 'crdroid' (CN): " common_name
+read -p "Enter country code 'AZ' (C): " country
+read -p "Enter state or province name 'Azerbaijan' (ST): " state
+read -p "Enter locality 'Baku' (L): " locality
+read -p "Enter organization name 'CalyxOS' (O): " organization
+read -p "Enter organizational unit 'CalyxOS' (OU): " organizational_unit
+read -p "Enter common name 'CalyxOS' (CN): " common_name
 read -p "Enter email address 'android@android.com' (emailAddress): " email
 
 # Construct the subject line
@@ -31,16 +31,16 @@ clear
 echo "Press ENTER TWICE to skip password (about 10-15 enter hits total). Cannot use a password for inline signing!"
 mkdir ~/.android-certs
 
-for x in releasekey platform shared media networkstack testkey bluetooth sdk_sandbox verifiedboot; do \
+for x in bluetooth media networkstack nfc platform releasekey sdk_sandbox shared testkey verifiedboot; do \
     ./development/tools/make_key ~/.android-certs/$x "$subject"; \
 done
 
 
 ## Create vendor for keys
-mkdir vendor/lineage-priv
-mv ~/.android-certs vendor/lineage-priv/keys
-echo "PRODUCT_DEFAULT_DEV_CERTIFICATE := vendor/lineage-priv/keys/releasekey" > vendor/lineage-priv/keys/keys.mk
-cat <<EOF > vendor/lineage-priv/keys/BUILD.bazel
+mkdir vendor/calyx-priv
+mv ~/.android-certs vendor/calyx-priv/keys
+echo "PRODUCT_DEFAULT_DEV_CERTIFICATE := vendor/calyx-priv/keys/releasekey" > vendor/calyx-priv/keys/keys.mk
+cat <<EOF > vendor/calyx-priv/keys/BUILD.bazel
 filegroup(
     name = "android_certificate_directory",
     srcs = glob([
@@ -51,6 +51,6 @@ filegroup(
 )
 EOF
 
-echo "Done! Now build as usual. If builds aren't being signed, add '-include vendor/lineage-priv/keys/keys.mk' to your device mk file"
-echo "Make copies of your vendor/lineage-priv folder as it contains your keys!"
+echo "Done! Now build as usual. If builds aren't being signed, add '-include vendor/calyx-priv/keys/keys.mk' to your device mk file"
+echo "Make copies of your vendor/calyx-priv folder as it contains your keys!"
 sleep 3
